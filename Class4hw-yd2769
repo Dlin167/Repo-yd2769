@@ -1,1 +1,143 @@
 This is the Class4 homework.
+
+def WhoAmI():
+return('yd2769')
+
+
+
+
+def getBondPrice(y, face, couponRate, m, ppy=1):
+    
+    coupon = face * couponRate / ppy  
+    discountRate = y / ppy 
+    periods = m * ppy  
+    
+    annuity_pv = sum([coupon / (1 + discountRate) ** t for t in range(1, periods + 1)])
+    
+   
+    face_pv = face / (1 + discountRate) ** periods
+    
+    bondPrice = annuity_pv + face_pv
+    
+    return bondPrice
+
+# Test values
+y = 0.03
+face = 2000000
+couponRate = 0.04
+m = 10
+
+
+print(getBondPrice(y, face, couponRate, m))      
+print(getBondPrice(y, face, couponRate, m, 2)) 
+
+
+
+
+def getBondDuration(y, face, couponRate, m, ppy=1):
+    coupon = face * couponRate / ppy  
+    discountRate = y / ppy  
+    periods = m * ppy  
+
+   
+    pvcf = []
+    w_pvcf = []
+    
+    for t in range(1, periods + 1):
+        pv_factor = 1 / (1 + discountRate) ** t
+        cash_flow = coupon if t < periods else coupon + face  
+        present_value = cash_flow * pv_factor
+        pvcf.append(present_value)
+        w_pvcf.append(t * present_value)
+
+    
+    bondPrice = sum(pvcf)
+    
+  
+    bondDuration = sum(w_pvcf) / bondPrice
+
+    return bondDuration
+
+
+# Test values
+y = 0.03
+face = 2000000
+couponRate = 0.04
+m = 10
+ppy = 1
+
+print(getBondDuration(y, face, couponRate, m, ppy))  
+
+
+
+
+
+
+
+def getBondPrice_E(face, couponRate, yc):
+    coupon = face * couponRate  
+    m = len(yc)  
+    
+    bondPrice = 0  
+
+    for t, rate in enumerate(yc, start=1):
+        pv_factor = 1 / (1 + rate) ** t
+        cash_flow = coupon if t < m else coupon + face  
+        bondPrice += cash_flow * pv_factor
+
+    return bondPrice 
+
+
+# Test values
+yc = [0.010, 0.015, 0.020, 0.025, 0.030]  
+face = 2000000
+couponRate = 0.04
+
+print(getBondPrice_E(face, couponRate, yc))  
+
+
+
+
+
+def getBondPrice_Z(face, couponRate, times, yc):
+    
+    coupon = face * couponRate  
+    cashflows = [coupon] * (len(times) - 1) + [face + coupon]  
+
+    
+    bondPrice = sum(cf / ((1 + rate) ** t) for cf, t, rate in zip(cashflows, times, yc))
+
+    return bondPrice
+
+
+# Test values
+yc = [0.010, 0.015, 0.020, 0.025, 0.030]  
+times = [1, 1.5, 3, 4, 7]  
+face = 2000000  
+couponRate = 0.04  
+
+
+print(getBondPrice_Z(face, couponRate, times, yc))
+
+
+
+
+
+
+def FizzBuzz(start, finish):
+    outlist = []
+    for i in range(start, finish + 1):
+        if i % 3 == 0 and i % 5 == 0:
+            outlist.append("fizzbuzz")
+        elif i % 3 == 0:
+            outlist.append("fizz")
+        elif i % 5 == 0:
+            outlist.append("buzz")
+        else:
+            outlist.append(i)
+    return outlist
+
+# Test values
+start = 1
+finish = 15
+print(FizzBuzz(start, finish))
